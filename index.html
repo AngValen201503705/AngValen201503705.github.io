@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLC2 P1 201503705</title>
+
+
+    <!---- CSS-->
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!----Menu-->
+        <div class="nav-main">
+            <div class="nav-title">
+                <h1>OLC2 P1 201502705</h1>
+            </div>
+            <ul class="nav-menu">
+                <li>
+                    <button>Nuevo</button>
+                </li>
+                <li>
+                    <button>Reporte 1</button>
+                </li>
+            </ul>
+
+        </div>
+
+        <!----Editor-->
+        <div class="Editor">
+            <div class="Entrada">
+                <h2>Entrada</h2>
+                <div><textarea name="Ingresa" id="txtEntrada" cols="80" rows="25"></textarea></div>
+                <div class="btnEjecutar"><button id="btnEjecutar" disabled> Ejecutar</button></div>
+                
+
+            </div>
+          
+            <div class="Salida">
+                <h2>Salida</h2>
+                <div><textarea name="Ingresa" id="txtSalida" cols="80" rows="25" readonly></textarea></div>
+                <div class="btnSalida"><button id="btnSalida"> Limpiar</button></div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <!--CUSTOM JS-->
+
+    <script type="module" src="/main.js" defer></script>
+    
+</body>
+
+<script src="https://unpkg.com/peggy"></script>
+<script src="https://cdn.jsdelivr.net/npm/peggy"></script>
+
+</html>
