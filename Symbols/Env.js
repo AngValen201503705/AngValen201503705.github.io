@@ -156,6 +156,12 @@ addtoconsola(cadena){
 
   }
 
+  getFunciones(){
+    return this.#tabla_funciones;
+  }
+
+
+
   addError(Error){
     this.#Errores.set("Tipo: "+Error.tipo+" Linea: "+Error.linea+" Columna: "+Error.columna, Error.descripcion);
   }

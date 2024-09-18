@@ -47,22 +47,36 @@ function Ejecutar() {
 
     }
 
+   let textosalida="======CONSOLA======== \n";
+   textosalida+=global.getConsola();
+    textosalida+="\n";
+    textosalida+="======TABLA DE SIMBOLOS======== \n";
+
     let tabla = global.getablasim();
 
 
     tabla.forEach (function(valor, id) {
        console.log(id+"="+valor.valor);
+       textosalida+=id+"="+valor.valor+"\n";
       })
 
       let errores= global.getErrores();
-
+      textosalida+="======TABLA DE ERRORES========\n";
       errores.forEach(function(valor, id) {
         console.log(id+"="+valor);
+        textosalida+=id+"="+valor.valor+"\n";
        })
 
-   
+       let fun=global.getFunciones()
+       textosalida+="======TABLA DE FUNCIONES========\n";
+       fun.forEach(function(valor, id) {
+        console.log(id);
+        textosalida+=id+"\n";
+       })
 
-    salida.value = global.getConsola();
+       
+
+    salida.value = textosalida;
 
 }
 

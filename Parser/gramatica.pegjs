@@ -53,6 +53,7 @@ instruccion
   / inst:funcion
   / inst:imprimir
   / inst:insEjecutarFuncion
+  /SimpleComment
 
 
 imprimibles
@@ -179,6 +180,7 @@ instruccionf
   / ins:InstruccionFor {InsFun.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
   / ins:insEjecutarFuncion {InsFun.push(ins);}
+  /SimpleComment
 
 
 instruccionesfor 
@@ -196,6 +198,7 @@ instruccionfor
   / ins:InstruccionFor {InsFor.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
   / ins:insEjecutarFuncion {InsFun.push(ins);}
+  /SimpleComment
 
   instruccionesif 
   = inst:instruccionif list:instruccionesifp 
@@ -212,6 +215,7 @@ instruccionif
   / ins:InstruccionFor {InsIf.push(ins);}
   / ins:InstruccionWhile {InsIf.push(ins);}
   / ins:insEjecutarFuncion {InsIf.push(ins);}
+  /SimpleComment
 
 
 instruccioneswhile 
@@ -229,6 +233,7 @@ instruccionwhile
   / ins:InstruccionFor {InsWhile.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
   / ins:insEjecutarFuncion {InsFun.push(ins);}
+  /SimpleComment
 
 inst_if
   = "if" "(" expr:expresion ")" "{" inst:instruccionesf "}" r_if

@@ -719,6 +719,9 @@ function peg$parse(input, options) {
           s0 = peg$parseimprimir();
           if (s0 === peg$FAILED) {
             s0 = peg$parseinsEjecutarFuncion();
+            if (s0 === peg$FAILED) {
+              s0 = peg$parseSimpleComment();
+            }
           }
         }
       }
@@ -1674,6 +1677,9 @@ function peg$parse(input, options) {
                   s1 = peg$f20(s1);
                 }
                 s0 = s1;
+                if (s0 === peg$FAILED) {
+                  s0 = peg$parseSimpleComment();
+                }
               }
             }
           }
@@ -1789,6 +1795,9 @@ function peg$parse(input, options) {
                   s1 = peg$f27(s1);
                 }
                 s0 = s1;
+                if (s0 === peg$FAILED) {
+                  s0 = peg$parseSimpleComment();
+                }
               }
             }
           }
@@ -1904,6 +1913,9 @@ function peg$parse(input, options) {
                   s1 = peg$f34(s1);
                 }
                 s0 = s1;
+                if (s0 === peg$FAILED) {
+                  s0 = peg$parseSimpleComment();
+                }
               }
             }
           }
@@ -2019,6 +2031,9 @@ function peg$parse(input, options) {
                   s1 = peg$f41(s1);
                 }
                 s0 = s1;
+                if (s0 === peg$FAILED) {
+                  s0 = peg$parseSimpleComment();
+                }
               }
             }
           }
