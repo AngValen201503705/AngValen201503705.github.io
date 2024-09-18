@@ -14,7 +14,7 @@ class Logica extends Expression {
 
   execute(env) {
 
-    console.log("Expresion logica2");
+    console.log("Expresion logica");
 
     if (this.izq == null) {
       let resultado_derecho = this.der.execute(env);

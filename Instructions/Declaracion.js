@@ -14,7 +14,7 @@ class Declaracion extends Instruction {
 
   execute(env) {
     console.log("Declaracion de variable");
-  
+
 
     if (this.tipo == null) {
       let result = this.expresion.execute(env);
@@ -24,7 +24,12 @@ class Declaracion extends Instruction {
 
       } else {
         let nsimbolo = new Symbol(this.nombre, result.valor, result.tipo);
-        env.add_symbol(nsimbolo);
+        let aux = env.add_symbol(nsimbolo);
+
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
 
       }
 
@@ -34,19 +39,43 @@ class Declaracion extends Instruction {
 
       if (this.tipo == "INT") {
         let nuevosim = new Symbol(this.nombre, 0, this.tipo);
-        env.add_symbol(nuevosim);
+        let aux = env.add_symbol(nuevosim);
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
+
       } else if (this.tipo == "FLOAT") {
         let nuevosim = new Symbol(this.nombre, 0.0, this.tipo);
-        env.add_symbol(nuevosim);
+        let aux = env.add_symbol(nuevosim);
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
       } else if (this.tipo == "STRING") {
         let nuevosim = new Symbol(this.nombre, "", this.tipo);
-        env.add_symbol(nuevosim);
+        let aux = env.add_symbol(nuevosim);
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
+
       } else if (this.tipo == "BOOLEAN") {
         let nuevosim = new Symbol(this.nombre, true, this.tipo);
-        env.add_symbol(nuevosim);
+        let aux = env.add_symbol(nuevosim);
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
+
       } else if (this.tipo == "CHAR") {
         let nuevosim = new Symbol(this.nombre, '', this.tipo);
-        env.add_symbol(nuevosim);
+        let aux = env.add_symbol(nuevosim);
+        if (aux == 0) {
+          let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+          env.addError(nerr);
+        }
+
       }
 
     } else {
@@ -59,12 +88,22 @@ class Declaracion extends Instruction {
       } else {
         if (result.tipo == this.tipo) {
           let nsimbolo = new Symbol(this.nombre, result.valor, result.tipo);
-          env.add_symbol(nsimbolo);
+          let aux = env.add_symbol(nsimbolo);
+          if(aux==0){
+            let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+            env.addError(nerr);
+           }
+
 
         } else if (result.tipo == "INT" && this.tipo == "FLOAT") {
 
           let nsimbolo = new Symbol(this.nombre, parseFloat(result.valor), this.tipo);
-          env.add_symbol(nsimbolo);
+          let aux= env.add_symbol(nsimbolo);
+          if(aux==0){
+            let nerr = new Error(this.linea, this.columna, "Error Semantico", "Variable ya fue declarada");
+            env.addError(nerr);
+           }
+
         }
 
         else {

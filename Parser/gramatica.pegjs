@@ -26,6 +26,11 @@
     OR: 1,
     NOT: 2,
   };
+
+  let InsFun= [];
+  let InsFor=[];
+  let InsWhile=[];
+  let ParamFun=[];
 }
 
 
@@ -82,16 +87,51 @@ declaracion
 
 
 
+
 //asignacion
 asignacion
-  =_ id:ID _ "=" expr:expresion ";"{
+  = id:ID _ "=" _ expr:expresion ";"{
+  const loc = location()?.start;
+  return new Asignacion(loc?.line, loc?.column, id, expr);
+}
+
+InstruccionWhile
+= tokenWhile _ "(" _  val:expresion ")" _ "{" _   instruccioneswhile _ "}" _ {
+  const loc = location()?.start;
+   let Wins= InsWhile;
+   InsWhile=[];
+  return new Mientras(loc?.line, loc?.column, val, Wins);
+}
+
+
+InstruccionFor 
+= tokenFor _ "(" _  ini:inicioFor  fin:expresion ";" paso:asignacionPara ")" _ "{" _   instruccionesfor _ "}" _ {
+  const loc = location()?.start;
+   let Fins= InsFor;
+   InsFor=[];
+  return new Para(loc?.line, loc?.column, ini, fin,paso, Fins);
+}
+
+inicioFor 
+= d:declaracion {return d;}
+/ a:asignacion {return a;}
+
+asignacionPara
+= _ id:ID _ "=" expr:expresion _{
   const loc = location()?.start;
   return new Asignacion(loc?.line, loc?.column, id, expr);
 }
 
 
 funcion
-  = type:tipo id:ID params:f_params "{" _ inst:instruccionesf _ "}"
+  = _ type:tipo _ id:ID _ params:f_params "{" _ inst:instruccionesf _ "}" {
+    const loc = location()?.start;
+    let CInstr= InsFun;
+    let CParm= ParamFun;
+    InsFun=[];
+    ParamFun=[];
+    return new Funcion(type,id, loc?.line, loc?.column,CParm,CInstr);
+  }
 
 
 f_params
@@ -102,24 +142,59 @@ l_params
 
 l_paramsp
   = "," list:l_params
-  / epsilon
+  / salidaRecursividad
 
 param
-  = type:tipo id:ID   
+  = type:tipo id:ID  {ParamFun.push(new Symbol(id,null,type));}
+  /salidaRecursividad 
 
 
 instruccionesf 
-  = inst:instruccionf list:instruccionesfp
+  = inst:instruccionf list:instruccionesfp 
 
 instruccionesfp
-  = instruccionesf instruccionesfp
-  / epsilon
+  = inst:instruccionesf list:instruccionesfp 
+  / salidaRecursividad
 
 instruccionf
-  = declaracion
-  / asignacion
+  = ins:declaracion {InsFun.push(ins);}
+  / ins:asignacion {InsFun.push(ins);}
   / inst_if
+  / ins:imprimir {InsFun.push(ins);}
+  / ins:InstruccionFor {InsFun.push(ins);}
+  / ins:InstruccionWhile {InsFun.push(ins);}
 
+
+instruccionesfor 
+  = inst:instruccionfor list:instruccionesforp 
+
+instruccionesforp
+  = inst:instruccionfor list:instruccionesforp 
+  / salidaRecursividad
+
+instruccionfor
+  = ins:declaracion {InsFor.push(ins);}
+  / ins:asignacion {InsFor.push(ins);}
+  / inst_if
+  / ins:imprimir {InsFor.push(ins);}
+  / ins:InstruccionFor {InsFor.push(ins);}
+  / ins:InstruccionWhile {InsFun.push(ins);}
+
+
+instruccioneswhile 
+  = inst:instruccionwhile list:instruccioneswhilep 
+
+instruccioneswhilep
+  = inst:instruccionwhile list:instruccioneswhilep 
+  / salidaRecursividad
+
+instruccionwhile
+  = ins:declaracion {InsWhile.push(ins);}
+  / ins:asignacion {InsWhile.push(ins);}
+  / inst_if
+  / ins:imprimir {InsWhile.push(ins);}
+  / ins:InstruccionFor {InsWhile.push(ins);}
+  / ins:InstruccionWhile {InsFun.push(ins);}
 
 inst_if
   = "if" "(" expr:expresion ")" "{" inst:instruccionesf "}" r_if
@@ -256,6 +331,8 @@ terminal
     const loc = location()?.start;
     return new Nativo(loc?.line, loc?.column, valor, Type.IDENTIFIER);
   }
+  /tokennull {return null;}
+
 
 
 tipo
@@ -270,6 +347,22 @@ tipo
 
 
 // expresiones regulares literal,terminal,primitivo
+
+tokens=
+tokenNot
+/tokenParseInt
+/tokenParseFloat
+/tokenToString
+/tokenToLower
+/tokenToUpper
+/tokenTypeOf
+/tokenVar
+/tokenT
+/tokenF
+/tokenFor
+/tokenImpr
+/tokenWhile
+/tokennull
 
 tokenNot
 =_ "!"
@@ -289,11 +382,19 @@ tokenToLower
 tokenToUpper
 =_ "toUpperCase"
 
+tokennull
+=_ "null"
 tokenTypeOf
 =_ "typeof"
 
 tokenVar
 = _ "var"
+
+tokenT= _ "true"
+tokenF= _ "false"
+tokenFor= _"for"
+tokenWhile= _"while"
+tokenImpr= _"System.out.println"
 
 STRING "string"
   = _"\"" chars:[^\"]* "\"" _ 
@@ -305,7 +406,7 @@ CHAR "char"
  =  _"'"[^"'"]"'" _  { return text(); }
 
 ID "identificador"
-  = _[a-zA-Z]([a-zA-Z]/[0-9]/"_")*  { return text(); }
+  = !tokens _ [a-zA-Z]([a-zA-Z]/[0-9]/"_")*  { return text(); }
 
 BOOLEAN "boolean"
   = _ tokenT _ { return text(); }
@@ -323,12 +424,11 @@ SimpleComment
 EndComment
   = "\r" / "\n" / "\r\n"
 
-tokenT= _ "true"
-tokenF= _ "false"
 
-tokenImpr= _"System.out.println"
 
 _ "Whitespace"
   = [ \t\n\r]*
+
+salidaRecursividad= ''
 
 epsilon = !.

@@ -1,10 +1,12 @@
 import { parse } from "./Parser/gramatica.js";
 import Environment from "./Symbols/Env.js";
 
+
 const entrada = document.getElementById("txtEntrada");
 const salida = document.getElementById("txtSalida");
 const btnEjecutar = document.getElementById("btnEjecutar");
 const btnLimpiar = document.getElementById("btnSalida");
+
 
 btnEjecutar.addEventListener("click", Ejecutar);
 btnLimpiar.addEventListener("click", Limpiar);
