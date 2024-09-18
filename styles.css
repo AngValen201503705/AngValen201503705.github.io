@@ -59,7 +59,19 @@ body {
     color: #002f87;
 }
 
+/*archivo*/
+
+
+
 /* editor*/
+
+.archivo{
+    padding: 10px;
+    display: flex;
+    justify-content:center;
+
+}
+
 
 .Editor {
 

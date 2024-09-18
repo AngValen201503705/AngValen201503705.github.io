@@ -13,28 +13,35 @@ class EjecFun extends Instruction {
 
 
   execute(env) {
-    console.log("Funcion");
+    console.log("Ejecutar funcion");
 
-    console.log("Es arreglo instrucciones: " + Array.isArray(this.instrucciones));
-    console.log("tamanio del arreglo: " + this.instrucciones.length);
+    let fun = env.buscar_funcion(this.id);
 
-    console.log("Es arreglo parametros: " + Array.isArray(this.params));
-    console.log("tamanio del arreglo: " + this.params.length);
+    if(fun==null){
+      let nerror = new Error(this.linea, this.columna, "Error Semantico", "Funcion no existe");
+        env.addError(nerror);
 
-    let par= this.params;
+    }else{
+      console.log("Es arreglo instrucciones: " + Array.isArray(fun.instrucciones));
+      console.log("tamanio del arreglo: " + fun.instrucciones.length);
+  
+      console.log("Es arreglo parametros: " + Array.isArray(fun.params));
+      console.log("tamanio del arreglo: " + fun.params.length);
 
-    par.forEach(element => {
-        env.add_symbol(element);
-    });
+      let par= fun.params;
 
-    let inst= this.instrucciones;
+      par.forEach(element => {
+          env.add_symbol(element);
+      });
+  
+      let inst= fun.instrucciones;
+  
+      inst.forEach(element => {
+          element.execute(env);
+      });
+  
 
-    inst.forEach(element => {
-        element.execute(env);
-    });
-
-
-
+    }
 
 }
 }

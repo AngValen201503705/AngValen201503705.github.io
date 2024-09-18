@@ -17,25 +17,21 @@ class Funcion extends Instruction {
   execute(env) {
     console.log("Funcion");
 
-    console.log("Es arreglo instrucciones: " + Array.isArray(this.instrucciones));
-    console.log("tamanio del arreglo: " + this.instrucciones.length);
+    let nfuncion= this;
+    console.log("instancia de funcion");
+    console.log(nfuncion instanceof Funcion);
 
-    console.log("Es arreglo parametros: " + Array.isArray(this.params));
-    console.log("tamanio del arreglo: " + this.params.length);
+    let resp= env.addfuncion(nfuncion);
 
-    let par= this.params;
+    if(resp==1){
+      console.log("agregue funcion");
+    }else{
+      let nerror = new Error(this.linea, this.columna, "Error Semantico", "Funcion ya existe");
+      env.addError(nerror);
 
-    par.forEach(element => {
-        env.add_symbol(element);
-    });
+    }
 
-    let inst= this.instrucciones;
-
-    inst.forEach(element => {
-        element.execute(env);
-    });
-
-
+    
 
 
 }

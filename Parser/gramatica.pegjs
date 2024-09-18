@@ -29,8 +29,10 @@
 
   let InsFun= [];
   let InsFor=[];
+  let InsIf=[];
   let InsWhile=[];
   let ParamFun=[];
+
 }
 
 
@@ -50,6 +52,7 @@ instruccion
   / inst:asignacion
   / inst:funcion
   / inst:imprimir
+  / inst:insEjecutarFuncion
 
 
 imprimibles
@@ -103,6 +106,13 @@ InstruccionWhile
   return new Mientras(loc?.line, loc?.column, val, Wins);
 }
 
+IntruccionIfSimple
+= tokenIf _ "(" _  val:expresion ")" _ "{" _   instruccionesif _ "}" _ {
+  const loc = location()?.start;
+   let Iins= InsIf;
+   InsIf=[];
+  return new Si(loc?.line, loc?.column, val, Iins);
+}
 
 InstruccionFor 
 = tokenFor _ "(" _  ini:inicioFor  fin:expresion ";" paso:asignacionPara ")" _ "{" _   instruccionesfor _ "}" _ {
@@ -122,6 +132,11 @@ asignacionPara
   return new Asignacion(loc?.line, loc?.column, id, expr);
 }
 
+insEjecutarFuncion
+= _  id:ID "(" _ ");"{
+  const loc = location()?.start;
+  return new EjecFun(id, loc?.line, loc?.column, null);
+}
 
 funcion
   = _ type:tipo _ id:ID _ params:f_params "{" _ inst:instruccionesf _ "}" {
@@ -159,10 +174,11 @@ instruccionesfp
 instruccionf
   = ins:declaracion {InsFun.push(ins);}
   / ins:asignacion {InsFun.push(ins);}
-  / inst_if
+  / ins:IntruccionIfSimple {InsFun.push(ins);}
   / ins:imprimir {InsFun.push(ins);}
   / ins:InstruccionFor {InsFun.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
+  / ins:insEjecutarFuncion {InsFun.push(ins);}
 
 
 instruccionesfor 
@@ -175,10 +191,27 @@ instruccionesforp
 instruccionfor
   = ins:declaracion {InsFor.push(ins);}
   / ins:asignacion {InsFor.push(ins);}
-  / inst_if
+  / ins:IntruccionIfSimple {InsFor.push(ins);}
   / ins:imprimir {InsFor.push(ins);}
   / ins:InstruccionFor {InsFor.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
+  / ins:insEjecutarFuncion {InsFun.push(ins);}
+
+  instruccionesif 
+  = inst:instruccionif list:instruccionesifp 
+
+instruccionesifp
+  = inst:instruccionif list:instruccionesifp 
+  / salidaRecursividad
+
+instruccionif
+  = ins:declaracion {InsIf.push(ins);}
+  / ins:asignacion {InsIf.push(ins);}
+  / ins:IntruccionIfSimple {InsIf.push(ins);}
+  / ins:imprimir {InsIf.push(ins);}
+  / ins:InstruccionFor {InsIf.push(ins);}
+  / ins:InstruccionWhile {InsIf.push(ins);}
+  / ins:insEjecutarFuncion {InsIf.push(ins);}
 
 
 instruccioneswhile 
@@ -191,10 +224,11 @@ instruccioneswhilep
 instruccionwhile
   = ins:declaracion {InsWhile.push(ins);}
   / ins:asignacion {InsWhile.push(ins);}
-  / inst_if
+  / IntruccionIfSimple {InsWhile.push(ins);}
   / ins:imprimir {InsWhile.push(ins);}
   / ins:InstruccionFor {InsWhile.push(ins);}
   / ins:InstruccionWhile {InsFun.push(ins);}
+  / ins:insEjecutarFuncion {InsFun.push(ins);}
 
 inst_if
   = "if" "(" expr:expresion ")" "{" inst:instruccionesf "}" r_if
@@ -363,6 +397,7 @@ tokenNot
 /tokenImpr
 /tokenWhile
 /tokennull
+/tokenIf
 
 tokenNot
 =_ "!"
@@ -394,6 +429,7 @@ tokenT= _ "true"
 tokenF= _ "false"
 tokenFor= _"for"
 tokenWhile= _"while"
+tokenIf=_ "if"
 tokenImpr= _"System.out.println"
 
 STRING "string"

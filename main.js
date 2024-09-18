@@ -7,12 +7,23 @@ const salida = document.getElementById("txtSalida");
 const btnEjecutar = document.getElementById("btnEjecutar");
 const btnLimpiar = document.getElementById("btnSalida");
 
+const archivo = document.getElementById("btnArchivo");
+
+
 
 btnEjecutar.addEventListener("click", Ejecutar);
 btnLimpiar.addEventListener("click", Limpiar);
-entrada.addEventListener("input", Vacio);
+
+
+archivo.addEventListener("change", (evento)=>{
+    const archivo2 = evento.target.files[0]
+    nuevoarchivo(archivo2)
+     .then(contenido => entrada.value = contenido)
+      .catch(error => entrada.value = error)
+})
 
 function Ejecutar() {
+    console.log("Entre a ejecutar");
     let textoingresado = entrada.value;
     const resultado = parse(textoingresado);
 
@@ -55,13 +66,25 @@ function Ejecutar() {
 
 }
 
-function Vacio() {
-    btnEjecutar.disabled = entrada.value.length === 0;
-
-}
 
 
 function Limpiar() {
     salida.value = "";
 
+}
+
+
+function nuevoarchivo(archivo2){
+    return new Promise( (resolve, reject)=> {
+        if(!archivo2.name.endsWith(".oak")){
+            reject("Archivo no admitido")
+        } else {
+            const freader = new FileReader()
+            freader.readAsText(archivo2)
+            freader.addEventListener("load", ()=>{
+                resolve(freader.result)
+            }
+        )
+        }
+    })
 }

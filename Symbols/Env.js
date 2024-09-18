@@ -12,6 +12,30 @@ class Environment {
     this.#Errores= new Map();
     this.consola="";
   }
+  
+addfuncion(funcion){
+  if(this.find_fun(funcion.id) === null) {
+    this.#tabla_funciones.set(funcion.id, funcion);
+    return 1;
+  } else{
+    return 0;
+
+  }
+
+}
+
+find_fun(id){
+  for(const iterator of this.#tabla_funciones) {
+    if(iterator[0] === id) {
+      console.log(iterator[1]);
+      return iterator[1];
+    }
+  }
+
+  return null;
+
+}
+
 
 
 addtoconsola(cadena){
@@ -94,6 +118,27 @@ addtoconsola(cadena){
     }
 
     return this.#find_variable(id, root.parent);
+  }
+
+  buscar_funcion(id){
+    return this.find_funcion(id, this);
+
+  }
+
+  find_funcion(id,root){
+    if(root === null || root === undefined) {
+      return null;
+    }
+
+    let current = root.#tabla_funciones;
+    for(const element of current) {
+      if(element[0] === id) {
+        return element[1];
+      }
+    }
+
+    return this.find_funcion(id, root.parent);
+
   }
 
   getablasim(){

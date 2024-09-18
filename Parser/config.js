@@ -16,5 +16,7 @@ module.exports = {
         Symbol: "../Symbols/Symbol.js",
         Para:"../Instructions/Para.js",
         Mientras:"../Instructions/Mientras.js",
+        EjecFun:"../Instructions/EjecutarFun.js",
+        Si:"../Instructions/Si.js",
     },
 };
